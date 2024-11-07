@@ -1,0 +1,3 @@
+[submodule "bain_challenge_backend"]
+	path = bain_challenge_backend
+	url = https://github.com/stauffenger/bain_challenge_backend
