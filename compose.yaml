@@ -1,0 +1,50 @@
+services:
+  frontend:
+    container_name: 'bain_challenge'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+    - 'PORT=8083'
+    ports:
+    - '8083:8083'
+    networks:
+      - app_network
+  backend:
+    container_name: 'bain_challenge_backend'
+    build:
+      context: ./bain_challenge_backend
+      dockerfile: ./Dockerfile
+    environment:
+    - 'DATABASE_HOST=database'
+    - 'DATABASE_PORT=27017'
+    - 'DATABASE_NAME=test_db'
+    - 'DATABASE_USERNAME=test'
+    - 'DATABASE_PASSWORD=bain_challenge'
+    - 'API_HOST=0.0.0.0'
+    - 'API_PORT=2002'
+    - 'CORS_ORIGIN=*'
+    ports:
+    - '2002:2002'
+    networks:
+      - db_network
+      - app_network
+  database:
+    image: 'mongo:latest'
+    container_name: 'mongodb'
+    restart: 'always'
+    environment:
+    - 'MONGO_INITDB_DATABASE=test_db'
+    - 'MONGO_INITDB_ROOT_USERNAME=test'
+    - 'MONGO_INITDB_ROOT_PASSWORD=bain_challenge'
+    volumes:
+    - 'mongo_data:/data/db'
+    ports:
+    - 2022:27017
+    networks:
+      - db_network
+volumes:
+  mongo_data:
+networks:
+  db_network:
+  app_network:
